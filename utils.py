@@ -116,6 +116,17 @@ def grouped_bar_chart(df, grouping='Survived', groupby='Pclass', x_label='x labe
 
     plt.show()
 
+def scale(df, sec1, sec2):
+    min_sec1 = min(df[sec1])
+    max_sec1 = max(df[sec1])
+    range_sec1 = max_sec1 - min_sec1
+    min_sec2 = min(df[sec2])
+    max_sec2 = max(df[sec2])
+    range_sec2 = max_sec2 - min_sec2
+    df[sec1] = [((x - min_sec1)/range_sec1) for x in df[sec1]]
+    df[sec2] = [((x - min_sec2)/range_sec2) for x in df[sec2]]
+    return df
+
 def normalize(df, label='', scaler=MinMaxScaler()):
     X_train = df.drop(label, axis=1)
     y_train = df[label]
