@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from scipy.stats import ttest_ind, ttest_1samp
 import scipy.stats as stats
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.neighbors import KNeighborsClassifier
@@ -115,24 +116,6 @@ def grouped_bar_chart(df, grouping='Survived', groupby='Pclass', x_label='x labe
 
     plt.show()
 
-# def dual_bar_chart(x_label='x label', y_label='y label', title='Title', \
-    # group1=1, group2=0, group1_label='Survived', group2_label='Deceased'):
-    # fig, ax = plt.subplots(figsize=(11, 5))
-    # width = 0.35
-    # x = np.arange(len(labels))
-    # rects1 = ax.bar(x - width/2, class_grouping_1, width, label=group1_label, color='green')
-    # rects2 = ax.bar(x + width/2, class_grouping_2, width, label=group2_label, color='red')
-
-    # # Add some text for labels, title and custom x-axis tick labels, etc.
-    # ax.set_ylabel(y_label)
-    # ax.set_xlabel(x_label)
-    # ax.set_title(title)
-    # ax.set_xticks(x, labels)
-    # ax.legend()
-
-    # ax.bar_label(rects1, padding=3)
-    # ax.bar_label(rects2, padding=3)
-
 def normalize(df, label='', scaler=MinMaxScaler()):
     X_train = df.drop(label, axis=1)
     y_train = df[label]
@@ -156,3 +139,43 @@ def train_test(df, test_case=[], label='', k_val=5):
     y_test_prediction = model.predict(X_test)
     print(y_test_prediction)
     return y_test_prediction
+
+def t_test_two(exp, cont, alpha=0.05, test_type='two-tailed'): 
+    t, pval = ttest_ind(exp, cont, equal_var=False)
+    if test_type == 'one-tailed':
+        pval /= 2 # divide by two because 1 rejection region
+    if pval < alpha:
+        print(f"Reject H0. t: {t}, p: {pval}")
+    else:
+        print(f"Do not reject H0. t: {t}, p: {pval}")
+
+def t_test_one(exp, hyp_mean, alpha=0.05, test_type='two-tailed'): 
+    t, pval = ttest_1samp(exp, hyp_mean)
+    if test_type == 'one-tailed':
+        pval /= 2 # divide by two because 1 rejection region
+    if pval < alpha:
+        print(f"Reject H0. t: {t}, p: {pval}")
+    else:
+        print(f"Do not reject H0. t: {t}, p: {pval}")
+
+def line_chart(x_ser, x_label='x label', y_label='y label', title='Title', *args, **kwargs):
+    plt.plot(x_ser, *args) # still need to fix this
+    plt.legend()
+    # lets beautify the plot 
+    # fix overlapping x-tick labels 
+    plt.xticks(rotation = 25, ha = 'right')
+    # labels
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    plt.title(title)
+    plt.grid() # grid lines, you can have major and minor grid lines and change colors etc
+    plt.tight_layout()
+    plt.show() # pop up window
+
+def plot_from_df(df, x='', y='', x_label='x label', y_label='y label', title='Title'):
+    plt.plot(df[x], df[y])
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    plt.title(title)
+    plt.tight_layout()
+    plt.show()
