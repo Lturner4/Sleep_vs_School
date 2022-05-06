@@ -183,12 +183,11 @@ def normalize(df, label='', scaler=MinMaxScaler()):
     @Param: label is string id of column for kNN class
     @Param: scaler is MinMaxScaler() to use if not instantiated in calling function. If this function is moved to a class, it should be private. 
     '''
+    scaler=scaler
     X_train = df.drop(label, axis=1)
-    y_train = df[label]
+    y_train = df[label].copy()
     scaler = scaler
     scaler.fit(X_train)
-    print(scaler.data_min_)
-    print(scaler.data_max_)
     X_train_normalized = scaler.transform(X_train)
     return X_train_normalized, y_train
 
@@ -200,8 +199,12 @@ def train_test(df, test_case=[], label='', k_val=5):
     @Param: label is string id of column for kNN class
     @Param: k_val is integer with number of neighbors to use, default is 5
     '''
+    X_train = df.drop(label, axis=1)
+    y_train = df[label].copy()
+
     #train
     scaler = MinMaxScaler()
+    scaler.fit(X_train)
     X_train_normalized, y_train = normalize(df, label=label, scaler=scaler)
     model = KNeighborsClassifier(n_neighbors=k_val)
     model.fit(X_train_normalized, y_train)
@@ -297,6 +300,9 @@ def knn_clf_acc(X, y, metric='euclidean', k=3):
     @Param: metric is string containing distance evaluator, defaulted to 'euclidean' to override method default of 'minikowski'.
     @Param: k is number of neighbors for kNN model
     '''
+    scaler = MinMaxScaler()
+    scaler.fit(X)
+    X = scaler.transform(X)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
     knn_clf = KNeighborsClassifier(n_neighbors=k, metric=metric)
     knn_clf.fit(X_train, y_train)
