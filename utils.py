@@ -1,10 +1,12 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from scipy.stats import ttest_ind, ttest_1samp
 import scipy.stats as stats
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn import metrics
 
 def print_stats(ser, label=''):
     print(label, "mid-value:", (ser.min() + ser.max()) / 2)
@@ -65,7 +67,7 @@ def hist_trend(ser, x_label='x label', y_label='y_label', title='Title'):
     plt.title(f'{title} (N = {N}): $\mu=$ {mu:.2f} $\sigma=$ {sigma:.2f}')
     fig.tight_layout()
 
-def grouped_bar_chart(df, grouping='Survived', groupby='Pclass', x_label='x label', y_label='y label', title='Title', \
+def grouped_bar_chart(df, grouping='Survived', groupby='Weekday', x_label='x label', y_label='y label', title='Title', \
     group1=1, group2=0, group1_label='Survived', group2_label='Deceased', label_decoder=None, how='count'):
     label_decoder = label_decoder
     labels = []
@@ -152,7 +154,7 @@ def train_test(df, test_case=[], label='', k_val=5):
     return y_test_prediction
 
 def t_test_two(exp, cont, alpha=0.05, test_type='two-tailed'): 
-    t, pval = ttest_ind(exp, cont, equal_var=False)
+    t, pval = stats.ttest_ind(exp, cont, equal_var=False)
     if test_type == 'one-tailed':
         pval /= 2 # divide by two because 1 rejection region
     if pval < alpha:
@@ -161,7 +163,7 @@ def t_test_two(exp, cont, alpha=0.05, test_type='two-tailed'):
         print(f"Do not reject H0. t: {t}, p: {pval}")
 
 def t_test_one(exp, hyp_mean, alpha=0.05, test_type='two-tailed'): 
-    t, pval = ttest_1samp(exp, hyp_mean)
+    t, pval = stats.ttest_1samp(exp, hyp_mean)
     if test_type == 'one-tailed':
         pval /= 2 # divide by two because 1 rejection region
     if pval < alpha:
@@ -190,3 +192,35 @@ def plot_from_df(df, x='', y='', x_label='x label', y_label='y label', title='Ti
     plt.title(title)
     plt.tight_layout()
     plt.show()
+
+def knn_clf_acc(X, y, metric='euclidean'):
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
+    knn_clf = KNeighborsClassifier(n_neighbors=3, metric=metric)
+    knn_clf.fit(X_train, y_train)
+    accuracy = knn_clf.score(X_test, y_test) 
+    print("accuracy = ", accuracy)
+
+def tree_clf_acc(X, y, class_names={1: "weekday", 0: "weekend"}):
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
+    clf = DecisionTreeClassifier() #random_state=0, max_depth=3)
+    clf.fit(X_train, y_train)
+    plt.figure(figsize=[30,30])
+    X_column = X
+    plot_tree(clf, feature_names=X_column.columns, class_names=class_names, filled=True)
+    accuracy = clf.score(X_test, y_test)
+    print("Accuracy:", accuracy)
+
+
+
+
+    # # Create Decision Tree classifier object
+    # clf = DecisionTreeClassifier()
+
+    # # Train Decision Tree Classifier
+    # clf = clf.fit(X_train,y_train)
+
+    # #Predict the response for test dataset
+    # y_pred = clf.predict(X_test)
+
+    # # Model Accuracy, how often is the classifier correct?
+    # print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
