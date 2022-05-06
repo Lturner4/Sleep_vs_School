@@ -207,20 +207,6 @@ def tree_clf_acc(X, y, class_names={1: "weekday", 0: "weekend"}):
     plt.figure(figsize=[30,30])
     X_column = X
     plot_tree(clf, feature_names=X_column.columns, class_names=class_names, filled=True)
+    y_pred = clf.predict(X_test)
     accuracy = clf.score(X_test, y_test)
-    print("Accuracy:", accuracy)
-
-
-
-
-    # # Create Decision Tree classifier object
-    # clf = DecisionTreeClassifier()
-
-    # # Train Decision Tree Classifier
-    # clf = clf.fit(X_train,y_train)
-
-    # #Predict the response for test dataset
-    # y_pred = clf.predict(X_test)
-
-    # # Model Accuracy, how often is the classifier correct?
-    # print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
+    print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
