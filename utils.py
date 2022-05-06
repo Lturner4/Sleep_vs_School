@@ -295,7 +295,7 @@ def knn_clf_acc(X, y, metric='euclidean', k=3):
     @Param: X is arrays of data to model, usually as pandas.DataFrame
     @Param: y is ArrayLike containing classifier data
     @Param: metric is string containing distance evaluator, defaulted to 'euclidean' to override method default of 'minikowski'.
-    @Param: k is number of neighbors for kNN
+    @Param: k is number of neighbors for kNN model
     '''
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
     knn_clf = KNeighborsClassifier(n_neighbors=k, metric=metric)
