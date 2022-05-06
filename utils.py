@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.stats as stats
-from sklearn import metrics
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn import metrics
 
 def print_stats(ser, label=''):
     '''
@@ -300,16 +300,16 @@ def knn_clf_acc(X, y, metric='euclidean', k=3):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
     knn_clf = KNeighborsClassifier(n_neighbors=k, metric=metric)
     knn_clf.fit(X_train, y_train)
-    y_pred = knn_clf.predict(X_test)
-    # accuracy = knn_clf.score(X_test, y_test) 
-    print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
+    accuracy = knn_clf.score(X_test, y_test) 
+    print("accuracy = ", accuracy)
 
 def tree_clf_acc(X, y, class_names={1: "weekday", 0: "weekend"}):
     '''
-    Tests accuracy of a kNN model created using [sklearn.model_selection.train_test_split](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html)
-    and [sklearn.neighbors.KNeighborsClassifier](https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html#sklearn.neighbors.KNeighborsClassifier.score)
+    tests accuracy of a decision tree model created using [sklearn.model_selection.train_test_split](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html)
+    and [sklearn.tree.DecisionTreeClassifier](https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html)
     @Param: X is arrays of data to model, usually as pandas.DataFrame
     @Param: y is ArrayLike containing classifier data
+    @Param: class_names is a dictionary containing string representations of class attributes
     '''
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
     clf = DecisionTreeClassifier() #random_state=0, max_depth=3)
@@ -319,4 +319,4 @@ def tree_clf_acc(X, y, class_names={1: "weekday", 0: "weekend"}):
     plot_tree(clf, feature_names=X_column.columns, class_names=class_names, filled=True)
     y_pred = clf.predict(X_test)
     accuracy = clf.score(X_test, y_test)
-    print("Accuracy:", accuracy)
+    print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
