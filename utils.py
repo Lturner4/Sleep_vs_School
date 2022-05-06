@@ -303,7 +303,7 @@ def knn_clf_acc(X, y, metric='euclidean', k=3):
     accuracy = knn_clf.score(X_test, y_test) 
     print("accuracy = ", accuracy)
 
-def tree_clf_acc(X, y, class_names={1: "weekday", 0: "weekend"}):
+def tree_clf_acc(X, y, class_names={1: "weekday", 0: "weekend"}, max_depth=None):
     '''
     tests accuracy of a decision tree model created using [sklearn.model_selection.train_test_split](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html)
     and [sklearn.tree.DecisionTreeClassifier](https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html)
@@ -312,7 +312,7 @@ def tree_clf_acc(X, y, class_names={1: "weekday", 0: "weekend"}):
     @Param: class_names is a dictionary containing string representations of class attributes
     '''
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
-    clf = DecisionTreeClassifier() #random_state=0, max_depth=3)
+    clf = DecisionTreeClassifier(max_depth=max_depth) #random_state=0, max_depth=3)
     clf.fit(X_train, y_train)
     plt.figure(figsize=[30,30])
     X_column = X
