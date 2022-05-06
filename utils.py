@@ -300,9 +300,9 @@ def knn_clf_acc(X, y, metric='euclidean', k=3):
     @Param: metric is string containing distance evaluator, defaulted to 'euclidean' to override method default of 'minikowski'.
     @Param: k is number of neighbors for kNN model
     '''
-    scaler = MinMaxScaler()
-    scaler.fit(X)
-    X = scaler.transform(X)
+    # scaler = MinMaxScaler()
+    # scaler.fit(X)
+    # X = scaler.transform(X)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=0)
     knn_clf = KNeighborsClassifier(n_neighbors=k, metric=metric)
     knn_clf.fit(X_train, y_train)
