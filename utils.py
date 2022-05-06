@@ -319,4 +319,4 @@ def tree_clf_acc(X, y, class_names={1: "weekday", 0: "weekend"}):
     plot_tree(clf, feature_names=X_column.columns, class_names=class_names, filled=True)
     y_pred = clf.predict(X_test)
     accuracy = clf.score(X_test, y_test)
-    print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
+    print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
