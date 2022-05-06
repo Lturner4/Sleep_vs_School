@@ -310,6 +310,7 @@ def tree_clf_acc(X, y, class_names={1: "weekday", 0: "weekend"}, max_depth=None)
     @Param: X is arrays of data to model, usually as pandas.DataFrame
     @Param: y is ArrayLike containing classifier data
     @Param: class_names is a dictionary containing string representations of class attributes
+    @Param: max_depth is max depth of decision tree classifier
     '''
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
     clf = DecisionTreeClassifier(max_depth=max_depth) #random_state=0, max_depth=3)
